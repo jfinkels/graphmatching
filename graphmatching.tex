@@ -1,4 +1,4 @@
-%% document.tex - the title of the document goes here
+%% graphmatching.tex - approximate graph matching
 %%
 %% Copyright 2014 Jeffrey Finkelstein.
 %%
@@ -82,7 +82,7 @@
 \SetWatermarkFontSize{3.5cm}
 
 %% Set the title and author of the PDF file.
-\hypersetup{pdftitle={Title of the document}, pdfauthor={Jeffrey Finkelstein}}
+\hypersetup{pdftitle={Approximate graph matching}, pdfauthor={Jeffrey Finkelstein}}
 
 %% Declare the bibliography file.
 \addbibresource{graphmatching.bib}
@@ -107,7 +107,7 @@
 
 %% Define the author, title, and date for the document.
 \author{Jeffrey~Finkelstein\\ Computer Science Department, Boston University}
-\title{Title of the document}
+\title{Approximate graph matching}
 
 \begin{document}
 
@@ -125,7 +125,7 @@
 
 \section{Definitions of graph matching problems}
 
-Unless otherwise specified, the norm of a matrix $\|M\|$ is the Frobenius norm.
+Unless otherwise specified, the norm of a matrix $\|M\|$ is the Frobenius norm, defined by $\|M\| = \sqrt{\sum_{i, j} M_{ij}^2}$.
 The all ones vector is denoted $\mathbf{1}$ and the all zeros vector is denoted $\mathbf{0}$.
 The all ones matrix is denoted $J$ and the all zeros matrix is denoted $O$.
 For two matrices $M$ and $N$, entrywise inequality is denoted $M \geq N$.
@@ -232,14 +232,21 @@ Here is a summary of the complexity of solving these optimization problems exact
 \item
   \MA{} is a special case of \textsc{Quadratic Assignment}, for which computing an exact solution is $\NP$-complete.
   However, computing an exact solution to \MA{} is not known to be $\NP$-complete and not known to be in $\P$.
+  In other words, \MA{} is in $\NPO$, but not in $\PO$ unless $\P = \NP$.
   \todo{Computing an approximate solution?}
-\item \MD{} is equivalent to \MA{}.
-\item \RMD{} is a special case of the \textsc{Convex Quadratic Programming} problem, for which computing an exact solution can be done in polynomial time \autocite{gl90}.
+\item \MD{} is equivalent to \MA{}, so it is in $\NPO$, but not in $\PO$ unless $\P = \NP$.
+\item
+  \RMD{} is a special case of the \textsc{Convex Quadratic Programming} problem, for which computing an exact solution can be done in polynomial time \autocite{gl90}.
+  In other words, \RMD{} is in $\PO$.
+  \todo{Is it in $\NNCO$?
+  Approximable in $\NC$?}
 \item
   \RMA{} is a special case of \textsc{Quadratic Programming}, for which computing an exact solution is $\NP$-complete.
   However, there seems to be a fully polynomial time approximation scheme for \RMA{} \autocite{v14}.
+  In other words, \RMA{} is in $\FPTAS$ (I believe).
   \todo{Can this approximation scheme be parallelized, for example, by choosing a polynomial number of equally spaced starting points at each iteration?
-  For example, see \url{http://arxiv.org/abs/1404.2644}.}
+  For example, see \url{http://arxiv.org/abs/1404.2644}.
+  In other words, is the problem in $\FNCAS$?}
 \end{itemize}
 
 Much of the current research seems to involve computing a relaxed graph matching (using one of the two formulations), then projecting that doubly stochastic matrix onto a permutation matrix in order to get a graph matching.
