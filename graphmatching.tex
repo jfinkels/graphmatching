@@ -89,7 +89,8 @@
 
 %% Declare theorem-like environments.
 \declaretheorem[numberwithin=section]{theorem}
-\declaretheorem[numberwithin=section, style=definition]{definition}
+\declaretheorem[numberlike=theorem]{corollary}
+\declaretheorem[numberlike=theorem, style=definition]{definition}
 
 %% Custom commands are declared here.
 \newcommand{\email}[1]{\textlangle\href{mailto:#1}{\nolinkurl{#1}}\textrangle}
@@ -100,6 +101,7 @@
 \newcommand{\RMD}{\textsc{Relaxed Minimum Disagreement}}
 \newcommand{\RMA}{\textsc{Relaxed Maximum Agreement}}
 \DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\agr}{agr}
 
 %% Redefine the footnote environment so it has no reference and no number.
 \long\def\symbolfootnote#1{\begingroup%
@@ -126,6 +128,7 @@
 \section{Definitions of graph matching problems}
 
 Unless otherwise specified, the norm of a matrix $\|M\|$ is the Frobenius norm, defined by $\|M\| = \sqrt{\sum_{i, j} M_{ij}^2}$.
+We also use the entrywise $\ell_1$ norm, $\|M\|_1$, defined by $\|M\|_1 = \sum_{i, j} M_{ij}$.
 The all ones vector is denoted $\mathbf{1}$ and the all zeros vector is denoted $\mathbf{0}$.
 The all ones matrix is denoted $J$ and the all zeros matrix is denoted $O$.
 For two matrices $M$ and $N$, entrywise inequality is denoted $M \geq N$.
@@ -254,6 +257,119 @@ Much of the current research seems to involve computing a relaxed graph matching
 In \autocite{l14}, the authors prove that when doing this, it is best to solve the indefinite relaxed graph matching problem instead of the convex relaxed graph matching problem (that is, \RMA{} instead of \RMD{}), because the former is almost always right and the latter almost always wrong.
 Still, under certain conditions, solving the convex relaxed graph matching problem can yield the correct permutation matrix \autocite{abk14, fs14}.
 \autocite{kmgg14} seems to be the only work simply finding a relaxed graph matching without projecting that doubly stochastic matrix back to a permutation matrix (they are really only finding a relaxed graph matching between a single graph and itself, but it should be possible, using \autocite{gkms14}, to enforce that when running such an algorithm on the disjoint union of two graphs $A$ and $B$, the solution matches some vertices of $A$ with some vertices of $B$).
+
+\section{Amplifying disagreements}
+
+One of our goals is to find a graph operation that, when applied to graphs that are nearly isomorphic, makes the graphs less isomorphic.
+
+Suppose $G$ and $H$ are undirected, unweighted, nonempty graphs on $n$ vertices with adjacency matrices $A$ and $B$, respectively.
+Suppose $\pi$ is a bijection from $V(G)$ to $V(H)$ and $P$ is its corresponding permutation matrix.
+For each permutation $\pi$, the \emph{agreement between $G$ and $H$ with respect to $\pi$}, denoted $\agr_\pi(G, H)$, is defined by
+\begin{equation*}
+  \agr_\pi(G, H) = \frac{\tr(AP^TBP)}{\max(\|A\|_1, \|B\|_1)}.
+\end{equation*}
+In other words, the agreement between $G$ and $H$ is the ratio of the number of edges correctly matched by $\pi$ to the total number of edges (in \autocite{owwz14}, the agreement is defined equivalently in these graph theoretic terms instead of our linear algebraic terms).
+The \emph{agreeability between $G$ and $H$}, denoted $\agr(G, H)$, is defined by
+\begin{equation*}
+  \agr(G, H) = \max_{\pi \in S_n} \agr_\pi(G, H).
+\end{equation*}
+When $G$ and $H$ admit a better matching, $\agr(G, H)$ increases.
+If $\agr(G, H) = 1$, then $G$ is isomorphic to $H$.
+
+Now we hope to find a graph operation $\star$ such that $\agr(G \star X, H \star Y) < \agr(G, H)$ for some graphs $X$ and $Y$.
+One initial attempt is the tensor product, denoted $\otimes$.
+A second attempt may be something like the zig-zag product.
+
+\begin{definition}[Tensor products]
+  \mbox{}
+  \begin{itemize}
+  \item
+    If $A$ and $B$ are $n \times n$ matrices, then the \emph{tensor product of $A$ and $B$}, denoted $A \otimes B$, is an $n^2 \times n^2$ matrix defined as follows.
+    Entry $(i, j, i', j')$ of $A \otimes B$ is $a_{i, j} b_{i', j'}$.
+  \item If $G$ and $H$ are graphs with adjacency matrices $A$ and $B$, respectively, then the \emph{tensor product of $G$ and $H$}, denoted $G \otimes H$, is the graph whose adjacency matrix is $A \otimes B$.
+  \item If $\pi$ and $\tau$ are permutations in $S_n$, then the \emph{tensor product of $\pi$ and $\tau$}, denoted $\pi \otimes \tau$, are permutations in $S_{n^2}$ defined by $(\pi \otimes \tau)(i, j) = (\pi(i), \tau(j))$.
+  \end{itemize}
+\end{definition}
+
+\begin{theorem}
+  If $\pi$ and $\tau$ are permutations with corresponding permutation matrices $P$ and $Q$, respectively, then $\pi \otimes \tau$ is a permutation with corresponding permutation $P \otimes Q$.
+\end{theorem}
+
+\begin{theorem}
+  For any undirected, unweighted, nonempty graphs $G$ and $H$ on $n$ vertices, and for any bijection $\pi$ from $V(G)$ to $V(H)$,
+  \begin{equation*}
+    \agr_{\pi \otimes \pi}(G \otimes G, H \otimes H) = \agr_\pi(G, H)^2.
+  \end{equation*}
+\end{theorem}
+\begin{proof}
+  This follows directly from the properties of the tensor product.
+  We consider the numerator and the denominator of the agreement separately.
+  Suppose $A$ and $B$ are the adjacency matrices of $G$ and $H$, respectively, and suppose $P$ is the permutation matrix corresponding to $\pi$.
+  For the numerator,
+  \begin{align*}
+    \tr((A \otimes A)(P \otimes P)^T(B \otimes B)(P \otimes P)) & = \tr((A \otimes A)(P^T \otimes P^T)(B \otimes B)(P \otimes P)) \\
+    & = \tr((AP^T \otimes AP^T)(BP \otimes BP)) \\
+    & = \tr(AP^TBP \otimes AP^TBP) \\
+    & = \tr(AP^TBP)^2.
+  \end{align*}
+  For the denominator,
+  \begin{equation*}
+    \max(\|A \otimes A\|_1, \|B \otimes B\|_1) = \max(\|A\|^2_1, \|B\|^2_1) = \max(\|A\|_1, \|B\|_1)^2.
+  \end{equation*}
+  Combine these two equalities with the definition of the agreement between $G$ and $H$ to produce the equality in the statement of the theorem.
+\end{proof}
+
+The next corollary follows from the previous theorem by induction on $\ell$.
+
+\begin{corollary}
+  Suppose $\ell$ is a positive integer, $G$ and $H$ are undirected, unweighted, nonempty graphs on $n$ vertices, and $\pi$ is a bijection from $V(G)$ to $V(H)$.
+
+  Let $\mathbf{G} = \bigotimes_{i = 1}^\ell G$, let $\mathbf{H} = \bigotimes_{i = 1}^\ell H$, and let $\Pi = \bigotimes_{i = 1}^\ell \pi$.
+  Now
+  \begin{equation*}
+    \agr_{\Pi}(\mathbf{G}, \mathbf{H}) = \agr_\pi(G, H)^\ell.
+  \end{equation*}
+\end{corollary}
+
+This corollary provides a lower bound for the agreement of the larger graphs $\mathbf{G}$ and $\mathbf{H}$ given a lower bound for the agreement of the original graphs $G$ and $H$, though the bound is rather unhelpful because it decreases rapidly.
+
+%% \begin{theorem}
+%%   For any square matrices $P$, $A$, and $B$, if $PA = BP$ then $(P \otimes P)(A \otimes A) = (B \otimes B)(P \otimes P)$.
+%% \end{theorem}
+%% \begin{proof}
+%%   By the mixed-product property of the tensor product,
+%%   \begin{equation*}
+%%     (P \otimes P)(A \otimes A) = PA \otimes PA = BP \otimes BP = (B \otimes B)(P \otimes P).
+%%   \end{equation*}
+%% \end{proof}
+
+\begin{theorem}
+  Suppose $\ell$ is a positive integer and $G$ and $H$ are undirected, unweighted, nonempty graphs $G$ and $H$ on $n$ vertices.
+  Let $\mathbf{G} = \bigotimes_{i = 1}^\ell G$ and $\mathbf{H} = \bigotimes_{i = 1}^\ell H$.
+  \begin{equation*}
+    \agr(G, H)^\ell \leq \agr(\mathbf{G}, \mathbf{H}),
+  \end{equation*}
+  with equality when $G$ is isomorphic to $H$.
+  In particular, for any $\epsilon \in [0, 1]$, if $\epsilon \leq \agr(G, H)$ then $\epsilon^\ell \leq \agr(\mathbf{G}, \mathbf{H})$.
+\end{theorem}
+\begin{proof}
+  Let $\pi$ be the bijection that maximizes $\agr_\pi(G, H)$ and let $\Pi = \bigotimes_{i = 1}^\ell \pi$.
+  By the previous corollary,
+  \begin{equation*}
+    \agr(G, H)^\ell = \agr_\pi(G, H)^\ell = \agr_\Pi(\mathbf{G}, \mathbf{H}).
+  \end{equation*}
+  Since $\Pi$ is just one bijection out of all possible bijections between the vertices of $\mathbf{G}$ and $\mathbf{H}$,
+  \begin{equation*}
+    \agr_\Pi(\mathbf{G}, \mathbf{H}) \leq \max_\tau \agr_\tau(\mathbf{G}, \mathbf{H}) = \agr(\mathbf{G}, \mathbf{H}).
+  \end{equation*}
+  Combine these equalities and inequalities to produce the inequality in the statement of the theorem.
+  If $G$ and $H$ are isomorphic, then $\agr(G, H)^\ell = 1^\ell = 1$, so
+  \begin{equation*}
+    1 = \agr(G, H)^\ell \leq \agr(\mathbf{G}, \mathbf{H}) \leq 1.
+  \end{equation*}
+
+  Finally, if $\epsilon \leq \agr(G, H)$, then $\epsilon^\ell \leq \agr(G, H)^\ell \leq \agr(\mathbf{G}, \mathbf{H})$.
+\end{proof}
 
 %% Print the bibliography section here.
 \printbibliography
