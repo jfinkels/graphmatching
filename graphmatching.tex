@@ -331,7 +331,9 @@ The next corollary follows from the previous theorem by induction on $\ell$.
   \end{equation*}
 \end{corollary}
 
+%% Completeness
 This corollary provides a lower bound for the agreement of the larger graphs $\mathbf{G}$ and $\mathbf{H}$ given a lower bound for the agreement of the original graphs $G$ and $H$, though the bound is rather unhelpful because it decreases rapidly.
+However, it does show that the tensor product, when used in this way, preserves isomorphism.
 
 %% \begin{theorem}
 %%   For any square matrices $P$, $A$, and $B$, if $PA = BP$ then $(P \otimes P)(A \otimes A) = (B \otimes B)(P \otimes P)$.
@@ -370,6 +372,15 @@ This corollary provides a lower bound for the agreement of the larger graphs $\m
 
   Finally, if $\epsilon \leq \agr(G, H)$, then $\epsilon^\ell \leq \agr(G, H)^\ell \leq \agr(\mathbf{G}, \mathbf{H})$.
 \end{proof}
+
+%% Soundness
+What we would like is an upper bound for the agreement of the larger graphs $\mathbf{G}$ and $\mathbf{H}$ given an upper bound for the agreement of the original graphs $G$ and $H$.
+Something like if $\agr(G, H) < \epsilon$, then $\agr(\mathbf{G}, \mathbf{H}) < \epsilon' < \epsilon$.
+\todo{How to show this?}
+
+\todo{Is it easier to show that some graph product increases disagreement instead of showing that it decreases agreement?}
+
+\todo{What if we use the relaxed versions of the problem here?}
 
 %% Print the bibliography section here.
 \printbibliography
