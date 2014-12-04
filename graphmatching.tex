@@ -298,6 +298,18 @@ A second attempt may be something like the zig-zag product.
 \end{theorem}
 
 \begin{theorem}
+  Suppose $A$ and $B$ are $n \times n$ Boolean matrices.
+  If $A \otimes A = B \otimes B$, then $A = B$.
+\end{theorem}
+\begin{proof}
+  We prove the contrapositive.
+  Suppose $A \neq B$.
+  Assume without loss of generality that the top left entry of $A$ is $0$ and the top left entry of $B$ is $1$.
+  Then the top left entry of $A \otimes A$ is a $0$ and the top left entry of $B \otimes B$ is $1$.
+  Therefore $A \otimes A \neq B \otimes B$.
+\end{proof}
+
+\begin{theorem}
   For any undirected, unweighted, nonempty graphs $G$ and $H$ on $n$ vertices, and for any bijection $\pi$ from $V(G)$ to $V(H)$,
   \begin{equation*}
     \agr_{\pi \otimes \pi}(G \otimes G, H \otimes H) = \agr_\pi(G, H)^2.
