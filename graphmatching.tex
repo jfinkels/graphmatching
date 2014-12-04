@@ -128,13 +128,15 @@
 \section{Definitions of graph matching problems}
 
 Unless otherwise specified, the norm of a matrix $\|M\|$ is the Frobenius norm, defined by $\|M\| = \sqrt{\sum_{i, j} M_{ij}^2}$.
-We also use the entrywise $\ell_1$ norm, $\|M\|_1$, defined by $\|M\|_1 = \sum_{i, j} M_{ij}$.
+%We also use the entrywise $\ell_1$ norm, $\|M\|_1$, defined by $\|M\|_1 = \sum_{i, j} M_{ij}$.
 The all ones vector is denoted $\mathbf{1}$ and the all zeros vector is denoted $\mathbf{0}$.
 The all ones matrix is denoted $J$ and the all zeros matrix is denoted $O$.
 For two matrices $M$ and $N$, entrywise inequality is denoted $M \geq N$.
 
 Suppose $A$ and $B$ are the adjacency matrices of two undirected graphs on $n$ vertices.
-The \emph{graph matching problem} can be expressed as
+The two graphs are \emph{isomorphic} if there is a permutation matrix $P$ such that $PA = BP$.
+The \emph{graph isomorphism problem} is the problem of determining whether such a permutation exists, given $A$ and $B$.
+The natural optimization problem corresponding to that decision problem is called the \emph{graph matching problem} and can be expressed as
 \begin{align*}
   \text{minimize } & \|PA - BP\|^2 \\
   \text{subject to } & P \1 = \1 \\
@@ -266,7 +268,7 @@ Suppose $G$ and $H$ are undirected, unweighted, nonempty graphs on $n$ vertices 
 Suppose $\pi$ is a bijection from $V(G)$ to $V(H)$ and $P$ is its corresponding permutation matrix.
 For each permutation $\pi$, the \emph{agreement between $G$ and $H$ with respect to $\pi$}, denoted $\agr_\pi(G, H)$, is defined by
 \begin{equation*}
-  \agr_\pi(G, H) = \frac{\tr(AP^TBP)}{\max(\|A\|_1, \|B\|_1)}.
+  \agr_\pi(G, H) = \frac{\tr(AP^TBP)}{\max(\|A\|^2, \|B\|^2)}.
 \end{equation*}
 In other words, the agreement between $G$ and $H$ is the ratio of the number of edges correctly matched by $\pi$ to the total number of edges (in \autocite{owwz14}, the agreement is defined equivalently in these graph theoretic terms instead of our linear algebraic terms).
 The \emph{agreeability between $G$ and $H$}, denoted $\agr(G, H)$, is defined by
@@ -314,7 +316,7 @@ A second attempt may be something like the zig-zag product.
   \end{align*}
   For the denominator,
   \begin{equation*}
-    \max(\|A \otimes A\|_1, \|B \otimes B\|_1) = \max(\|A\|^2_1, \|B\|^2_1) = \max(\|A\|_1, \|B\|_1)^2.
+    \max(\|A \otimes A\|^2, \|B \otimes B\|^2) = \max((\|A\|^2)^2, (\|B\|^2)^2) = \max(\|A\|^2, \|B\|^2)^2.
   \end{equation*}
   Combine these two equalities with the definition of the agreement between $G$ and $H$ to produce the equality in the statement of the theorem.
 \end{proof}
@@ -380,7 +382,8 @@ Something like if $\agr(G, H) < \epsilon$, then $\agr(\mathbf{G}, \mathbf{H}) < 
 
 \todo{
   Is it true that if $\hat{P}(A \otimes A) = (B \otimes B)\hat{P}$ then $\hat{P} = P \otimes P$ for some permutation matrix $P$?
-  If so, and $X \otimes X = Y \otimes Y$ implies $X = Y$, then we're in a very good position.
+  If so, then we can conclude that $PA = BP$.
+  In \autocite{owwz14}, the authors claim, citing a complicated \oldstylenums{1971} math paper, that if $G \otimes G$ is isomorphic to $H \otimes H$, then $G$ is isomorphic to $H$.
 }
 
 \todo{Is it easier to show that some graph product increases disagreement instead of showing that it decreases agreement?}
