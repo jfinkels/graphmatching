@@ -260,6 +260,16 @@ In \autocite{l14}, the authors prove that when doing this, it is best to solve t
 Still, under certain conditions, solving the convex relaxed graph matching problem can yield the correct permutation matrix \autocite{abk14, fs14}.
 \autocite{kmgg14} seems to be the only work simply finding a relaxed graph matching without projecting that doubly stochastic matrix back to a permutation matrix (they are really only finding a relaxed graph matching between a single graph and itself, but it should be possible, using \autocite{gkms14}, to enforce that when running such an algorithm on the disjoint union of two graphs $A$ and $B$, the solution matches some vertices of $A$ with some vertices of $B$).
 
+
+\todo{Links:}
+
+\begin{itemize}
+\item \url{http://www.nada.kth.se/~viggo/wwwcompendium/node118.html#5498}
+\item \url{http://link.springer.com/chapter/10.1007/978-3-642-14165-2_50}
+\item \url{http://dx.doi.org/10.1016/S0020-0190(00)00151-4}
+\item \url{http://www.math.tau.ac.il/~hassin/qa.pdf}
+\end{itemize}
+
 \section{Amplifying disagreements}
 
 One of our goals is to find a graph operation that, when applied to graphs that are nearly isomorphic, makes the graphs less isomorphic.
@@ -299,10 +309,10 @@ A second attempt may be graph powering; something more complicated like the zig-
 
 \begin{theorem}
   Suppose $A$ and $B$ are $n \times n$ Boolean matrices.
-  If $A \otimes A = B \otimes B$, then $A = B$.
+  We have $A = B$ if and only if $A \otimes A = B \otimes B$.
 \end{theorem}
 \begin{proof}
-  We prove the contrapositive.
+  If $A = B$ then $A \otimes A = B \otimes B$ immediately from the definitions.
   Suppose $A \neq B$.
   Assume without loss of generality that the top left entry of $A$ is $0$ and the top left entry of $B$ is $1$.
   Then the top left entry of $A \otimes A$ is a $0$ and the top left entry of $B \otimes B$ is $1$.
