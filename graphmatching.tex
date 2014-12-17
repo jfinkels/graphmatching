@@ -322,7 +322,7 @@ On the other hand, there seems to be a fully polynomial time approximation schem
   \end{tabular}
 \end{definition}
 
-\RMD{} is a special case of \CQP{} (a minimization form of \QP{}) \todo{reference or explain why?}.
+\RMD{} is a special case of the \CQP{} problem (itself a special case of the minimization form of \QP{}) \todo{reference or explain why this is a special case}.
 
 \begin{definition}[\CQP{}]
   \mbox{}
@@ -415,7 +415,8 @@ A second attempt may be graph powering; something more complicated like the zig-
   Suppose $A$ and $B$ are the adjacency matrices of $G$ and $H$, respectively, and suppose $P$ is the permutation matrix corresponding to $\pi$.
   For the numerator,
   \begin{align*}
-    \tr((A \otimes A)(P \otimes P)^T(B \otimes B)(P \otimes P)) & = \tr((A \otimes A)(P^T \otimes P^T)(B \otimes B)(P \otimes P)) \\
+    \tr((A \otimes A)(P \otimes P)^T(B \otimes B) & (P \otimes P)) \\
+    & = \tr((A \otimes A)(P^T \otimes P^T)(B \otimes B)(P \otimes P)) \\
     & = \tr((AP^T \otimes AP^T)(BP \otimes BP)) \\
     & = \tr(AP^TBP \otimes AP^TBP) \\
     & = \tr(AP^TBP)^2.
