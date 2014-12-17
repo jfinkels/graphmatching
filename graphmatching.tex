@@ -339,8 +339,9 @@ On the other hand, there seems to be a fully polynomial time approximation schem
   The budget problem for \CQP{} is $\P$-complete.
 \end{theorem}
 \begin{proof}
-  Computing an exact solution to \CQP{} can be done in polynomial time \autocite{gl90}.
-  Since \textsc{Linear Programming} is a special case of \CQP{}, and \textsc{Linear Programming} is $\P$-complete \autocite{ghr95}, \CQP{} is $\P$-complete as well.
+  Computing an exact solution to \CQP{} can be done in polynomial time \autocite{gl90}, so the problem is in $\P$.
+  Since a linear function is a convex function, and a linear function can be expressed as a quadratic function with $Q = O$, \textsc{Linear Programming} is a special case of \CQP{}, therefore the latter is $\P$-hard since the former is \autocite{ghr95}.
+  Therefore \CQP{} is $\P$-complete.
 \end{proof}
 
 Since the budget problem for \CQP{} is in $\P$, \RMD{} is in $\PO$.
