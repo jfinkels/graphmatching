@@ -101,7 +101,7 @@
 \newcommand{\RMD}{\textsc{Relaxed Minimum Disagreement}}
 \newcommand{\RMA}{\textsc{Relaxed Maximum Agreement}}
 \newcommand{\MQA}{\textsc{Maximum Quadratic Assignment}}
-\renewcommand{\QP}{\textsc{Maximum Quadratic Programming}}
+\newcommand{\MQP}{\textsc{Maximum Quadratic Programming}}
 \newcommand{\CQP}{\textsc{Convex Quadratic Programming}}
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\agr}{agr}
@@ -288,9 +288,9 @@ As stated in the previous section, \MD{} and \MA{} are equivalent, so it suffice
   \end{tabular}
 \end{definition}
 
-\RMA{} is a special case of \QP{}.
+\RMA{} is a special case of \MQP{}.
 
-\begin{definition}[\QP{}]
+\begin{definition}[\MQP{}]
   \mbox{}
 
   \begin{tabular}{r p{9.3cm}}
@@ -301,7 +301,7 @@ As stated in the previous section, \MD{} and \MA{} are equivalent, so it suffice
   \end{tabular}
 \end{definition}
 
-The budget problem for \QP{} is $\NP$-complete \autocite{vavasis90}, so the optimization problem is in $\NPO$.
+The budget problem for \MQP{} is $\NP$-complete \autocite{vavasis90}, so the optimization problem is in $\NPO$.
 Although special cases are approximable (for example, \autocite{vavasis92, fly98}), in general no quasipolynomial approximation exists unless $\NP \subseteq \QP$, and no $O(1)$-approximation exists unless $\P = \NP$ \autocite{br95}.
 
 On the other hand, there seems to be a fully polynomial time approximation scheme for \RMA{} \autocite{v14}; in other words, \RMA{} is (I believe) in $\FPTAS$.
@@ -322,7 +322,7 @@ On the other hand, there seems to be a fully polynomial time approximation schem
   \end{tabular}
 \end{definition}
 
-\RMD{} is a special case of the \CQP{} problem (itself a special case of the minimization form of \QP{}) \todo{reference or explain why this is a special case}.
+\RMD{} is a special case of the \CQP{} problem (itself a special case of the minimization form of \MQP{}) \todo{reference or explain why this is a special case}.
 
 \begin{definition}[\CQP{}]
   \mbox{}
