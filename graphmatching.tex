@@ -144,7 +144,7 @@ The natural optimization problem corresponding to that decision problem is calle
 \begin{align*}
   \text{minimize } & \|PA - BP\|^2 \\
   \text{subject to } & P \1 = \1 \\
-  & \1^T P = \1^T \\
+  & P^T \1 = \1 \\
   & P \in \{0, 1\}^{n \times n}.
 \end{align*}
 Since
@@ -157,7 +157,7 @@ and since $\|A\|$ and $\|B\|$ are constants with respect to the variable $P$, an
 \begin{align*}
   \text{maximize } & \tr(AP^TBP) \\
   \text{subject to } & P \1 = \1 \\
-  & \1^T P = \1^T \\
+  & P^T \1 = \1 \\
   & P \in \{0, 1\}^{n \times n}.
 \end{align*}
 A solution to the graph matching problem (in either of these two formulations) is a permutation matrix $P$ that witnesses an isomorphism between the graphs whose adjacency matrices are $A$ and $B$.
@@ -171,14 +171,14 @@ The \emph{convex relaxed graph matching problem} is
 \begin{align*}
   \text{minimize } & \|DA - BD\|^2 \\
   \text{subject to } & D \1 = \1 \\
-  & \1^T D = \1^T \\
+  & D^T \1 = \1 \\
   & D \geq O,
 \end{align*}
 and the \emph{indefinite relaxed graph matching problem} is
 \begin{align*}
   \text{maximize } & \tr(AD^TBD) \\
   \text{subject to } & D \1 = \1 \\
-  & \1^T D = \1^T \\
+  & D^T \1 = \1 \\
   & D \geq O.
 \end{align*}
 
@@ -193,7 +193,7 @@ In this section, we have renamed the two formulations of the graph matching prob
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P^T \1 = \1^T P = \1$. \\
+    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P \1 = P^T \1 = \1$. \\
     Measure: & $\tr(AP^TBP)$. \\
     Type: & maximization.
   \end{tabular}
@@ -206,7 +206,7 @@ In this section, we have renamed the two formulations of the graph matching prob
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & $n \times n$ real matrices $A$ and $B$. \\
-    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P^T \1 = \1^T P = \1$. \\
+    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P \1 = P^T \1 = \1$. \\
     Measure: & $\tr(AP^TBP)$. \\
     Type: & maximization.
   \end{tabular}
@@ -265,7 +265,7 @@ As stated in the previous section, \MD{} and \MA{} are equivalent, so it suffice
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P^T \1 = \1^T P = \1$. \\
+    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P \1 = P^T \1 = \1$. \\
     Measure: & $\|PA - BP\|^2$. \\
     Type: & minimization.
   \end{tabular}
@@ -282,7 +282,7 @@ As stated in the previous section, \MD{} and \MA{} are equivalent, so it suffice
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ nonnegative rational matrix $D$, subject to the constraints $D^T \1 = \1^T D = \1$. \\
+    Solution: & $n \times n$ nonnegative rational matrix $D$, subject to the constraints $D \1 = D^T \1 = \1$. \\
     Measure: & $\tr(AD^TBD)$. \\
     Type: & maximization.
   \end{tabular}
@@ -316,7 +316,7 @@ On the other hand, there seems to be a fully polynomial time approximation schem
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ nonnegative rational matrix $D$, subject to the constraints $D^T \1 = \1^T D = \1$. \\
+    Solution: & $n \times n$ nonnegative rational matrix $D$, subject to the constraints $D \1 = D^T \1 = \1$. \\
     Measure: & $\|DA - BD\|^2$. \\
     Type: & minimization.
   \end{tabular}
