@@ -44,7 +44,7 @@ The output is `graphmatching.pdf`, and can be viewed with any PDF reader.
 Copyright
 ---------
 
-Copyright 2014 Jeffrey Finkelstein.
+Copyright 2014, 2015 Jeffrey Finkelstein.
 
 Both the LaTeX markup and the compiled document are made available under the
 terms of the Creative Commons Attribution-ShareAlike 4.0 International License,
