@@ -351,9 +351,13 @@ Since the budget problem for \CQP{} is in $\P$, \RMD{} is in $\PO$.
 \section{Using relaxed matchings to recover matchings}
 
 Much of the current research seems to involve computing a relaxed graph matching (using one of the two formulations), then projecting that doubly stochastic matrix onto a permutation matrix in order to get a graph matching.
-In \autocite{l14}, the authors prove that when doing this, it is best to solve the indefinite relaxed graph matching problem instead of the convex relaxed graph matching problem (that is, \RMA{} instead of \RMD{}), because the former is almost always right and the latter almost always wrong; \autocite{v14} follows this strategy.
+In \autocite{relax14}, the authors prove that when doing this, it is best to solve the indefinite relaxed graph matching problem instead of the convex relaxed graph matching problem (that is, \RMA{} instead of \RMD{}), because the former is almost always right and the latter almost always wrong; \autocite{v14} follows this strategy.
 Still, under certain conditions, solving the convex relaxed graph matching problem can yield the correct permutation matrix \autocite{abk14, fs14}.
 \autocite{kmgg14} seems to be the only work simply finding a relaxed graph matching without projecting that doubly stochastic matrix back to a permutation matrix (they are really only finding a relaxed graph matching between a single graph and itself, but it should be possible, using \autocite{gkms14}, to enforce that when running such an algorithm on the disjoint union of two graphs $A$ and $B$, the solution matches some vertices of $A$ with some vertices of $B$).
+
+\section{Seeded graph matchings}
+
+\todo{\autocite{lfp14, l14, lavpp14}.}
 
 \section{Amplifying disagreements}
 
