@@ -103,6 +103,10 @@
 \newcommand{\MQA}{\textsc{Maximum Quadratic Assignment}}
 \newcommand{\MQP}{\textsc{Maximum Quadratic Programming}}
 \newcommand{\CQP}{\textsc{Convex Quadratic Programming}}
+\newcommand{\SMD}{\textsc{Seeded Minimum Disagreement}}
+\newcommand{\SMA}{\textsc{Seeded Maximum Agreement}}
+\newcommand{\SRMD}{\textsc{Seeded Relaxed Minimum Disagreement}}
+\newcommand{\SRMA}{\textsc{Seeded Relaxed Maximum Agreement}}
 \DeclareMathOperator{\tr}{tr}
 \DeclareMathOperator{\agr}{agr}
 
@@ -135,6 +139,14 @@ Unless otherwise specified, the norm of a matrix $\|M\|$ is the Frobenius norm, 
 %We also use the entrywise $\ell_1$ norm, $\|M\|_1$, defined by $\|M\|_1 = \sum_{i, j} M_{ij}$.
 The all ones vector is denoted $\mathbf{1}$ and the all zeros vector is denoted $\mathbf{0}$.
 The all ones matrix is denoted $J$ and the all zeros matrix is denoted $O$.
+The $n \times n$ identity matrix is denoted $I_n$, or simply $I$ if its size is understood from context.
+The \emph{direct sum} of square matrices $A$ and $B$, denoted $A \oplus B$, is the block matrix
+\begin{equation*}
+  \begin{bmatrix}
+    A & O \\
+    O & B
+  \end{bmatrix}.
+\end{equation*}
 For two matrices $M$ and $N$, entrywise inequality is denoted $M \geq N$.
 
 Suppose $A$ and $B$ are the adjacency matrices of two undirected graphs on $n$ vertices.
@@ -162,7 +174,7 @@ and since $\|A\|$ and $\|B\|$ are constants with respect to the variable $P$, an
 \end{align*}
 A solution to the graph matching problem (in either of these two formulations) is a permutation matrix $P$ that witnesses an isomorphism between the graphs whose adjacency matrices are $A$ and $B$.
 
-Relaxing the constraint ``$P \in \{0, 1\}^{n \times n}$'' to the constraint ``$P \geq O$'', in other words, allowing $P$ to be a doubly stochastic instead of a permutation matrix, yields the \emph{relaxed graph matching problem}.
+Relaxing the constraint ``$P \in \{0, 1\}^{n \times n}$'' to the constraint ``$P \geq O$'', in other words, allowing $P$ to be a \emph{doubly stochastic} instead of a permutation matrix, yields the \emph{relaxed graph matching problem}.
 However, when $P$ is a doubly stochastic matrix, \autoref{eq:trace} does not necessarily hold.
 Hence the two formulations of the relaxed graph matching problem corresponding to the two formulations of the graph matching problem are not necessarily equivalent.
 For this reason, we give each formulation a different name.
@@ -186,7 +198,20 @@ and the \emph{indefinite relaxed graph matching problem} is
 
 In this section, we have renamed the two formulations of the graph matching problem to \MD{} and \MA{}, and expressed the problems as formal optimization problems.
 
-\subsection{Graph matching}
+\todo{Note that formally, optimization problems must have positive measure functions, but this doesn't matter too much.}
+
+\todo{Define budget problem for optimization problems.}
+
+\begin{definition}[\MD]
+  \mbox{}
+
+  \begin{tabular}{r p{9.3cm}}
+    Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
+    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P \1 = P^T \1 = \1$. \\
+    Measure: & $\|PA - BP\|^2$. \\
+    Type: & minimization.
+  \end{tabular}
+\end{definition}
 
 \begin{definition}[\MA]
   \mbox{}
@@ -198,6 +223,83 @@ In this section, we have renamed the two formulations of the graph matching prob
     Type: & maximization.
   \end{tabular}
 \end{definition}
+
+\subsection{Graph matching}
+
+As stated in the previous section, \MD{} and \MA{} are equivalent, so it suffices to study only \MA{}.
+
+\begin{theorem}
+  The budget problems for \MD{} and \MA{} are equivalent under polynomial time many-one reductions.
+\end{theorem}
+\begin{proof}
+  As shown in \autoref{eq:trace},
+  \begin{equation*}
+    \|PA - BP\|^2 = \|A\|^2 + \|B\|^2 - 2 \tr(AP^TBP),
+  \end{equation*}
+  which is equivalent to
+  \begin{equation*}
+    \tr(AP^TBP) = \frac{1}{2} (\|A\|^2 + \|B\|^2 - \|PA - BP\|^2).
+  \end{equation*}
+  By these two equalities,
+  \begin{equation*}
+    \|PA - BP\|^2 \leq k \iff \tr(AP^TBP) \geq \frac{1}{2} (\|A\|^2 + \|B\|^2 - k)
+  \end{equation*}
+  and
+  \begin{equation*}
+    \tr(AP^TBP) \geq k \iff \|PA - BP\|^2 \leq \|A\|^2 + \|B\|^2 - 2k.
+  \end{equation*}
+  It is straightforward to apply these equivalences to construct the stated reductions.
+\end{proof}
+
+These budget problems are $\NP$-complete.
+This proof is based on the proof of the $\NP$-completeness of the budget problem for \textsc{Minimum Quadratic Assignment} implicit in \autocite{sg76}.
+
+\begin{theorem}
+  The budget problem for \MD{} is $\NP$-complete, as is the budget problem for \MA{}.
+\end{theorem}
+\begin{proof}
+  By the previous theorem, it suffices to show that \MA{} is $\NP$-complete.
+
+  The problem is in $\NP$: the witness is the permutation matrix $P$, and the measure can be computed (and compared to the budget) in polynomial time by matrix multiplication.
+  The $\NP$-hardness follows from a polynomial time many-one reduction from the \textsc{Hamiltonian Cycle} problem.
+  Given a graph $G$ on $n$ vertices, the reduction is the mapping $G \mapsto (A, B, 2n)$, where $A$ is the adjacency matrix of $G$ and $B$ is the adjacency matrix of the cycle graph on $n$ vertices.
+  %%Given a graph $G$ with vertex set $[n]$ and edge set $E$, let the budget be $n$, the matrix $A$ be the adjacency matrix of $G$, and the matrix $B$ be defined as
+  %% \begin{equation*}
+  %%   B_{ij} =
+  %%   \begin{cases}
+  %%     1 & \text{if } i + 1 \equiv j \pmod{n} \\
+  %%     0 & \text{otherwise}
+  %%   \end{cases}
+  %% \end{equation*}
+  %% for each $i$ and $j$ in $[n]$.
+  Each of $A$, $B$, and $2n$ can be computed and written in polynomial time.
+
+  If $G$ has a Hamiltonian cycle, there is some permutation $\pi$ such that the undirected edge $(\pi(i), \pi(i + 1))$ is in $E$ for each $i \in [n]$, where addition is modulo $n$.
+  Choosing $P$ to be the permutation matrix corresponding to $\pi$,
+  \begin{align*}
+    \tr(AP^TBP) & = \langle PA, BP \rangle  \\
+    & = \langle PAP^T, B \rangle \\
+    & = \sum_{i, j} (PAP^T)_{i, j} B_{i, j} \\
+    & = \sum_{i, j} A_{\pi(i), \pi(j)} B_{i, j} \\
+    & = 2 \sum_i A_{\pi(i), \pi(i + 1)},
+  \end{align*}
+  where the last equality is due to the definition of $B$ and the factor of $2$ is due to the fact that both $A$ and $B$ are symmetric matrices.
+  Since $A$ is just the adjacency matrix of $G$ and the undirected edge $(\pi(i), \pi(i + 1))$ is in $E$ for each $i$ in $[n]$, the above sum is exactly $2n$.
+  In particular, $\tr(AP^TBP) \geq 2n$, so $(A, B, 2n)$ is in the budget problem for \MA{}.
+
+  Now suppose that $\tr(AP^TBP) \geq 2n$.
+  The above equalities still hold, so $2\sum_i A_{\pi(i), \pi(i + 1)} \geq 2n$.
+  Since the entries of $A$ are in $\{0, 1\}$, this inequality is only satisfied if each $A_{\pi(i), \pi(i + 1)}$ is $1$.
+  In other words, for each $i$, the undirected edge $(\pi(i), \pi(i + 1))$ is in $E$, so $\pi$ defines a Hamiltonian cycle in $G$.
+  Therefore we have shown a correct polynomial time many-one reduction from \textsc{Hamiltonian Cycle} to \MA{}.
+\end{proof}
+
+\textsc{Graph Isomorphism} is the special case of the budget problem for \MD{} in which the budget is zero (in other words, it is the problem of finding a permutation causing no disagreements).
+It is also the special case of the budget problem for \MA{} in which the budget is the number of edges in the graph (in other words, it is the problem of finding a permutation that causes every possible agreement).
+
+\begin{theorem}
+  \MD{} and \MA{} are equivalent under \todo{the strictest possible approximation-preserving} reductions.
+\end{theorem}
 
 \MA{} is a special case of \MQA{}.
 
@@ -212,68 +314,13 @@ In this section, we have renamed the two formulations of the graph matching prob
   \end{tabular}
 \end{definition}
 
-The budget problem for \MQA{} is $\NP$-complete; I could not find this written anywhere, so I have given a proof here based on the proof of the $\NP$-completeness of \textsc{Minimum Quadratic Assignment} implicit in \autocite{sg76}.
-\begin{theorem}
-  The budget problem for \MQA{} is $\NP$-complete.
-\end{theorem}
-\begin{proof}
-  The problem is in $\NP$: the witness is the permutation matrix $P$, and the measure can be computed (and compared to the budget) in polynomial time by matrix multiplication.
-  The $\NP$-hardness follows from a polynomial time many-one reduction from the \textsc{Hamiltonian Cycle} problem.
-  Given a graph $G$ with vertex set $[n]$ and edge set $E$, let the budget be $n$, the matrix $A$ be the adjacency matrix of $G$, and the matrix $B$ be defined as
-  \begin{equation*}
-    B_{ij} =
-    \begin{cases}
-      1 & \text{if } i + 1 \equiv j \pmod{n} \\
-      0 & \text{otherwise}
-    \end{cases}
-  \end{equation*}
-  for each $i$ and $j$ in $[n]$.
-  Each of $A$, $B$, and $n$ can be computed and written in polynomial time.
-
-  If $G$ has a Hamiltonian cycle, there is some permutation $\pi$ such that $(\pi(i), \pi(i + 1)) \in E$ for each $i \in [n]$, where addition is modulo $n$.
-  Choosing $P$ to be the permutation matrix corresponding to $\pi$,
-  \begin{align*}
-    \tr(AP^TBP) & = \langle PA, BP \rangle  \\
-    & = \langle PAP^T, B \rangle \\
-    & = \sum_{i, j} (PAP^T)_{i, j} B_{i, j} \\
-    & = \sum_{i, j} A_{\pi(i), \pi(j)} B_{i, j} \\
-    & = \sum_{i} A_{\pi(i), \pi(i + 1)} && \text{(by definition of } B \text{)}.
-  \end{align*}
-  Since $A$ is just the adjacency matrix of $G$ and $(\pi(i), \pi(i + 1)) \in E$ for each $i$ in $[n]$, the above sum is exactly $n$.
-  Hence $\tr(AP^TBP) \geq n$, so $(A, B, n)$ is in the budget problem for \MQA{}.
-
-  Now suppose that some instance $(A, B, n)$ constructed according to the above reduction procedure satisfies $\tr(AP^TBP) \geq n$.
-  The above equalities still hold, so $\sum_{i} A_{\pi(i), \pi(i + 1)} \geq n$.
-  Since the entries of $A$ are in $\{0, 1\}$, this inequality is only satisfied if each of the addends in the sum is $1$.
-  In other words, $(\pi(i), \pi(i + 1)) \in E$, so $\pi$ defines a Hamiltonian cycle in $G$.
-  Therefore we have shown a correct polynomial time many-one reduction from \textsc{Hamiltonian Cycle} to \MQA{}.
-\end{proof}
+Since the budget problem for \MA{} is $\NP$-complete, so is the budget problem for \MQA{} (I could not find this proven anywhere else).
 Since the budget problem is in $\NP$, the optimization problem is in $\NPO$.
 Although certain special cases are in $\APX$ (for example, see \autocite{ahs01}), the general problem is $\APX$-hard because some of its special cases are $\APX$-hard \autocite{mms10}.
 The general problem has a polynomial time $O(\sqrt{n})$-approximation, but unless $\NP$ has a probabilistic quasipolynomial time simulation, there is no polylogarithmic approximation \autocite{mms10}.
 
-\MA{} is a special case, so its complexity may be different.
-Just as \textsc{Graph Isomorphism} is not known to be in $\P$ and not known to be $\NP$-complete, \MA{} is not known to be in $\PO$ and not known to be $\NPO$-complete; resolving the complexity of the latter problem will resolve that of the former.
+\MA{} is a special case, so it may be more approximable.
 \todo{What is the approximability of this problem?}
-
-%%The budget problem for the \emph{minimization} form of the quadratic assignment problem is strongly $\NP$-complete; furthermore, the minimization problem itself is not in $\APX$ \autocite{sg76} and I think it is in fact $\NPO$-complete (since \textsc{Minimum Traveling Salesperson} is, and I think that's a special case).
-
-As stated in the previous section, \MD{} and \MA{} are equivalent, so it suffices to study only \MA{}.
-
-\begin{definition}[\MD]
-  \mbox{}
-
-  \begin{tabular}{r p{9.3cm}}
-    Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P \1 = P^T \1 = \1$. \\
-    Measure: & $\|PA - BP\|^2$. \\
-    Type: & minimization.
-  \end{tabular}
-\end{definition}
-
-\begin{theorem}
-  \MD{} and \MA{} are equivalent under \todo{the strictest possible approximation-preserving} reductions.
-\end{theorem}
 
 \subsection{Indefinite relaxed graph matching}
 
@@ -282,7 +329,7 @@ As stated in the previous section, \MD{} and \MA{} are equivalent, so it suffice
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ nonnegative rational matrix $D$, subject to the constraints $D \1 = D^T \1 = \1$. \\
+    Solution: & $n \times n$ doubly stochastic matrix $D$. \\
     Measure: & $\tr(AD^TBD)$. \\
     Type: & maximization.
   \end{tabular}
@@ -316,7 +363,7 @@ On the other hand, there seems to be a fully polynomial time approximation schem
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ nonnegative rational matrix $D$, subject to the constraints $D \1 = D^T \1 = \1$. \\
+    Solution: & $n \times n$ doubly stochastic matrix $D$. \\
     Measure: & $\|DA - BD\|^2$. \\
     Type: & minimization.
   \end{tabular}
@@ -348,16 +395,86 @@ Since the budget problem for \CQP{} is in $\P$, \RMD{} is in $\PO$.
 
 \todo{Is it in $\NNCO$? Approximable in $\NC$?}
 
+\subsection{Seeded graph matchings}
+
+\todo{read and interpret \autocite{lfp14, l14, lavpp14}.}
+
+The \emph{seeded graph matching} problem is a generalization of the graph matching problem in which some pairs of vertices are required to be matched.
+The optimization problem corresponding to the seeded graph matching problem is called \SMD{}.
+We can assume without loss of generality (by applying an additional permutation to the graphs) that if there are $s$ seed pairs, then they are the vertices $\{1, \dotsc, s\}$ in both graphs.
+Thus, instead of finding an $n \times n$ permutation matrix $P$ that minimizes $\| PA - BP \|^2$ as in the graph matching problem, the goal is now to find a $(n - s) \times (n - s)$ permutation matrix $P$ that minimizes $\| (I_s \oplus P) A - B (I_s \oplus P) \|^2$.
+
+\begin{definition}[\SMD{}]
+  \mbox{}
+
+  \begin{tabular}{r p{9.3cm}}
+    Instance: & symmetric $n \times n$ Boolean matrices $A$ and $B$, natural number $s$. \\
+    Solution: & $(n - s) \times (n - s)$ permutation matrix $P$. \\
+    Measure: & $\| (I_s \oplus P) A - B (I_s \oplus P) \|^2$. \\
+    Type: & minimization.
+  \end{tabular}
+\end{definition}
+
+\begin{definition}[\SMA{}]
+  \mbox{}
+
+  \begin{tabular}{r p{9.3cm}}
+    Instance: & symmetric $n \times n$ Boolean matrices $A$ and $B$, natural number $s$. \\
+    Solution: & $(n - s) \times (n - s)$ permutation matrix $P$. \\
+    Measure: & $\tr(A (I_s \oplus P^T) B (I_s \oplus P))$. \\
+    Type: & maximization.
+  \end{tabular}
+\end{definition}
+
+These problems are at least as difficult as their unseeded counterparts, so their budget problems are $\NP$-complete.
+
+\todo{
+  How approximable are these problems?
+  Can we use an approximation for the unseeded versions to solve the seeded versions?
+}
+
+%% \begin{theorem}
+%%   \MD{} reduces to \todo{under the strictest approximation-preserving reduction} \SMD{}.
+%% \end{theorem}
+%% \begin{proof}
+%%   The reduction sets the number of seeds to be zero, so a solution to the latter problem is exactly a solution to the former problem.
+%% \end{proof}
+
+\subsection{Seeded relaxed graph matchings}
+
+\begin{definition}[\SRMD{}]
+  \mbox{}
+
+  \begin{tabular}{r p{9.3cm}}
+    Instance: & symmetric $n \times n$ Boolean matrices $A$ and $B$, $s \times s$ doubly stochastic matrix $C$. \\
+    Solution: & $(n - s) \times (n - s)$ doubly stochastic matrix $D$. \\
+    Measure: & $\| (C \oplus D) A - B (C \oplus D) \|^2$. \\
+    Type: & minimization.
+  \end{tabular}
+\end{definition}
+
+\begin{definition}[\SRMA{}]
+  \mbox{}
+
+  \begin{tabular}{r p{9.3cm}}
+    Instance: & symmetric $n \times n$ Boolean matrices $A$ and $B$, $s \times s$ doubly stochastic matrix $C$. \\
+    Solution: & $(n - s) \times (n - s)$ doubly stochastic matrix $D$. \\
+    Measure: & $\tr(A (C^T \oplus D^T) B (C \oplus D))$. \\
+    Type: & maximization.
+  \end{tabular}
+\end{definition}
+
+\todo{
+  How approximable are these problems?
+  Can we use an approximation for the unseeded versions to solve the seeded versions?
+}
+
 \section{Using relaxed matchings to recover matchings}
 
 Much of the current research seems to involve computing a relaxed graph matching (using one of the two formulations), then projecting that doubly stochastic matrix onto a permutation matrix in order to get a graph matching.
 In \autocite{relax14}, the authors prove that when doing this, it is best to solve the indefinite relaxed graph matching problem instead of the convex relaxed graph matching problem (that is, \RMA{} instead of \RMD{}), because the former is almost always right and the latter almost always wrong; \autocite{v14} follows this strategy.
 Still, under certain conditions, solving the convex relaxed graph matching problem can yield the correct permutation matrix \autocite{abk14, fs14}.
 \autocite{kmgg14} seems to be the only work simply finding a relaxed graph matching without projecting that doubly stochastic matrix back to a permutation matrix (they are really only finding a relaxed graph matching between a single graph and itself, but it should be possible, using \autocite{gkms14}, to enforce that when running such an algorithm on the disjoint union of two graphs $A$ and $B$, the solution matches some vertices of $A$ with some vertices of $B$).
-
-\section{Seeded graph matchings}
-
-\todo{\autocite{lfp14, l14, lavpp14}.}
 
 \section{Amplifying disagreements}
 
