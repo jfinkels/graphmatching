@@ -132,15 +132,19 @@
 
 %% Document content goes here.
 
-\section{Definitions of graph matching problems}
+\section{Notation and definitions}
 
 For any positive integer $n$, let $[n]$ be the set $\{0, \dotsc, n - 1\}$.
+
+\subsection{Matrices}
+
+In this paper, vectors are column vectors.
 Unless otherwise specified, the norm of a matrix $\|M\|$ is the Frobenius norm, defined by $\|M\| = \sqrt{\sum_{i, j} M_{ij}^2}$.
 %We also use the entrywise $\ell_1$ norm, $\|M\|_1$, defined by $\|M\|_1 = \sum_{i, j} M_{ij}$.
 The all ones vector is denoted $\mathbf{1}$ and the all zeros vector is denoted $\mathbf{0}$.
 The all ones matrix is denoted $J$ and the all zeros matrix is denoted $O$.
 The $n \times n$ identity matrix is denoted $I_n$, or simply $I$ if its size is understood from context.
-The \emph{direct sum} of square matrices $A$ and $B$, denoted $A \oplus B$, is the block matrix
+The direct sum of square matrices $A$ and $B$, denoted $A \oplus B$, is the block matrix
 \begin{equation*}
   \begin{bmatrix}
     A & O \\
@@ -148,6 +152,11 @@ The \emph{direct sum} of square matrices $A$ and $B$, denoted $A \oplus B$, is t
   \end{bmatrix}.
 \end{equation*}
 For two matrices $M$ and $N$, entrywise inequality is denoted $M \geq N$.
+
+A nonnegative real matrix $M$ is doubly stochastic if it satisfies the equations $M \mathbf{1} = \mathbf{1}$ and $M^T \mathbf{1} = \mathbf{1}$.
+If furthermore each entry in the matrix is either zero or one, the matrix is called a permutation matrix.
+
+\subsection{Graph matching}
 
 Suppose $A$ and $B$ are the adjacency matrices of two undirected graphs on $n$ vertices.
 The two graphs are \emph{isomorphic} if there is a permutation matrix $P$ such that $PA = BP$.
@@ -174,7 +183,7 @@ and since $\|A\|$ and $\|B\|$ are constants with respect to the variable $P$, an
 \end{align*}
 A solution to the graph matching problem (in either of these two formulations) is a permutation matrix $P$ that witnesses an isomorphism between the graphs whose adjacency matrices are $A$ and $B$.
 
-Relaxing the constraint ``$P \in \{0, 1\}^{n \times n}$'' to the constraint ``$P \geq O$'', in other words, allowing $P$ to be a \emph{doubly stochastic} instead of a permutation matrix, yields the \emph{relaxed graph matching problem}.
+Relaxing the constraint ``$P \in \{0, 1\}^{n \times n}$'' to the constraint ``$P \geq O$'', in other words, allowing $P$ to be a doubly stochastic instead of a permutation matrix, yields the \emph{relaxed graph matching problem}.
 However, when $P$ is a doubly stochastic matrix, \autoref{eq:trace} does not necessarily hold.
 Hence the two formulations of the relaxed graph matching problem corresponding to the two formulations of the graph matching problem are not necessarily equivalent.
 For this reason, we give each formulation a different name.
@@ -207,7 +216,7 @@ In this section, we have renamed the two formulations of the graph matching prob
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P \1 = P^T \1 = \1$. \\
+    Solution: & $n \times n$ permutation matrix $P$. \\
     Measure: & $\|PA - BP\|^2$. \\
     Type: & minimization.
   \end{tabular}
@@ -218,7 +227,7 @@ In this section, we have renamed the two formulations of the graph matching prob
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
-    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P \1 = P^T \1 = \1$. \\
+    Solution: & $n \times n$ permutation matrix $P$. \\
     Measure: & $\tr(AP^TBP)$. \\
     Type: & maximization.
   \end{tabular}
@@ -295,7 +304,7 @@ This proof is based on the proof of the $\NP$-completeness of the budget problem
 \end{proof}
 
 \textsc{Graph Isomorphism} is the special case of the budget problem for \MD{} in which the budget is zero (in other words, it is the problem of finding a permutation causing no disagreements).
-It is also the special case of the budget problem for \MA{} in which the budget is the number of edges in the graph (in other words, it is the problem of finding a permutation that causes every possible agreement).
+It is also the special case of the budget problem for \MA{} in which the budget is the number of edges in the graphs (in other words, it is the problem of finding a permutation that causes every possible agreement).
 
 \begin{theorem}
   \MD{} and \MA{} are equivalent under \todo{the strictest possible approximation-preserving} reductions.
@@ -308,7 +317,7 @@ It is also the special case of the budget problem for \MA{} in which the budget 
 
   \begin{tabular}{r p{9.3cm}}
     Instance: & $n \times n$ real matrices $A$ and $B$. \\
-    Solution: & $n \times n$ Boolean matrix $P$, subject to the constraints $P \1 = P^T \1 = \1$. \\
+    Solution: & $n \times n$ permutation matrix $P$. \\
     Measure: & $\tr(AP^TBP)$. \\
     Type: & maximization.
   \end{tabular}
@@ -382,6 +391,8 @@ On the other hand, there seems to be a fully polynomial time approximation schem
   \end{tabular}
 \end{definition}
 
+\CQP{} is an inherently sequential problem because it admits a polynomial time computable function that produces optimal solutions, but it is a generalization of \textsc{Linear Programming}, which is itself inherently sequential.
+
 \begin{theorem}
   The budget problem for \CQP{} is $\P$-complete.
 \end{theorem}
@@ -452,6 +463,8 @@ These problems are at least as difficult as their unseeded counterparts, so thei
     Type: & minimization.
   \end{tabular}
 \end{definition}
+
+Just as \RMD{} is in $\PO$, so too is \SRMD{}, for the same reason.
 
 \begin{definition}[\SRMA{}]
   \mbox{}
