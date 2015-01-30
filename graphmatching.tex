@@ -144,6 +144,7 @@ Unless otherwise specified, the norm of a matrix $\|M\|$ is the Frobenius norm, 
 The all ones vector is denoted $\mathbf{1}$ and the all zeros vector is denoted $\mathbf{0}$.
 The all ones matrix is denoted $J$ and the all zeros matrix is denoted $O$.
 The $n \times n$ identity matrix is denoted $I_n$, or simply $I$ if its size is understood from context.
+The trace of a square matrix $A$, denoted $\tr A$, is the sum of its diagonal entries.
 The direct sum of square matrices $A$ and $B$, denoted $A \oplus B$, is the block matrix
 \begin{equation*}
   \begin{bmatrix}
@@ -202,6 +203,27 @@ and the \emph{indefinite relaxed graph matching problem} is
   & D^T \1 = \1 \\
   & D \geq O.
 \end{align*}
+In either problem, the domain over which to maximize is the set of doubly stochastic matrices, which is the convex hull of the set of permutation matrices.
+However, only in the former problem is the objective function convex (hence its name).
+\todo{Explain why the objective function is convex.}
+The latter problem is called ``indefinite'' because the Hessian matrix of the objective function has trace zero at each point in the domain, and is therefore an indefinite matrix, which indicates that the objective function is \emph{not} convex.\footnote{%
+  The \emph{Hessian} of a multivariate function $f$ is the matrix of its second-order partial derivatives; specifically, entry $(i, j)$ in the Hessian matrix is $\frac{\partial^2 f}{\partial x_i \partial x_j}$.
+  Evaluating the Hessian matrix entrywise at a point in the domain produces a matrix with real entries.
+  If the Hessian matrix evaluated at a critical point is nonsingular, then the signs of the eigenvalues of this matrix indicate whether the critical point is a local minimum, a local maximum, or a saddle point.
+  (This is just the multivariate generalization of using the second derivative of a univariate function to determine whether a critical point is a local minimum or a local maximum.)
+  If all the eigenvalues are positive (or equivalently, the matrix is positive definite), then the point is a minimum.
+  If all the eigenvalues are negative (or equivalently, the matrix is negative definite), then the point is a maximum.
+  If some are negative and some are positive (in other words, the matrix is \emph{indefinite}), then the point is a saddle point.
+  If a function has a saddle point, then it is not convex.
+
+  If the second-order partial derivatives are locally continuous at the critical point, then the Hessian matrix evaluated at that point is symmetric.
+  The trace of a real symmetric matrix equals the sum of its eigenvalues.
+  If the sum is zero, some eigenvalues must be positive and some must be negative.
+  Therefore, a trace of zero implies a saddle point which implies the function is not convex.%
+}
+(Computing the Hessian reveals that entry $(ii', jj')$ in the matrix is $A_{ii'} B_{jj'} + A_{i'i} B_{j'j}$ independent of $D$.
+Since $A$ and $B$ are symmetric matrices, this is simply $2 A_{ii'} B_{jj'}$.
+The trace of the matrix is therefore $2 \tr(A \otimes B)$, a constant function with respect to $D$ whose value is always zero if the graphs being considered do not have self-loops.)
 
 \section{Complexity of graph matching problems}
 
@@ -360,10 +382,13 @@ The general problem has a polynomial time $O(\sqrt{n})$-approximation, but unles
 The budget problem for \MQP{} is $\NP$-complete \autocite{vavasis90}, so the optimization problem is in $\NPO$.
 Although special cases are approximable (for example, \autocite{vavasis92, fly98}), in general no quasipolynomial approximation exists unless $\NP \subseteq \QP$, and no $O(1)$-approximation exists unless $\P = \NP$ \autocite{br95}.
 
-On the other hand, there seems to be a fully polynomial time approximation scheme for \RMA{} \autocite{v14}; in other words, \RMA{} is (I believe) in $\FPTAS$.
-\todo{Can this approximation scheme be parallelized, for example, by choosing a polynomial number of equally spaced starting points at each iteration?
-  For example, see \url{http://arxiv.org/abs/1404.2644}.
-  In other words, is the problem in $\FNCAS$?}
+The authors of \autocite{v14} provide what, on first glance, appears to be a fully polynomial time approximation scheme for \RMA{}.
+However, they provide no theoretical guarantee on the performance of their approximation algorithm, and it seems unlikely that any such conclusions could be drawn: the objective function is not convex, and hence the approximation guarantees provided by, for example, \autocite[Theorem~2.3]{jaggi11}, do not apply.
+\todo{How approximable is this problem?}
+
+Even worse, I believe the objective function is \emph{never} convex, regardless of input graphs.
+The quadratic form of the Hessian of the objective function, $x^T H x$, equals $2 \tr(AX \otimes BX)$, where $X$ is the $n \times n$ matrix containing the $n^2$ entries of the vector $x$.
+This value is positive if $x$ is a positive vector, so $H$ is not a negative definite matrix, and therefore there are local maxima.
 
 \subsection{Convex relaxed graph matching}
 
@@ -404,7 +429,12 @@ On the other hand, there seems to be a fully polynomial time approximation schem
 
 Since the budget problem for \CQP{} is in $\P$, \RMD{} is in $\PO$.
 
-\todo{Is it in $\NNCO$? Approximable in $\NC$?}
+\todo{
+  Is there a highly parallel approximation algorithm for Convex Quadratic Programming?
+  For Relaxed Minimum Disagreement?
+  Since the objective function is convex, we could use the Frank--Wolfe algorithm to solve this problem, which can be solved in a distributed manner at least (with a sparsity constraint) via \autocite{blgbs15}.
+  Can we parallelize Frank--Wolfe by simply choosing a polynomial number of equally spaced starting points in the domain, then recursively shrinking the domain and recursing?
+  (This may not work because finding the best direction may require linear programming, which is PO-complete.)}
 
 \subsection{Seeded graph matchings}
 
