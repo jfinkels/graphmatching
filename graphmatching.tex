@@ -108,6 +108,7 @@
 \newcommand{\SRMD}{\textsc{Seeded Relaxed Minimum Disagreement}}
 \newcommand{\SRMA}{\textsc{Seeded Relaxed Maximum Agreement}}
 \DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\vect}{vec}
 \DeclareMathOperator{\agr}{agr}
 
 %% Redefine the footnote environment so it has no reference and no number.
@@ -144,6 +145,7 @@ Unless otherwise specified, the norm of a matrix $\|M\|$ is the Frobenius norm, 
 The all ones vector is denoted $\mathbf{1}$ and the all zeros vector is denoted $\mathbf{0}$.
 The all ones matrix is denoted $J$ and the all zeros matrix is denoted $O$.
 The $n \times n$ identity matrix is denoted $I_n$, or simply $I$ if its size is understood from context.
+The vectorization of an $m \times n$ matrix $A$, denoted $\vect(A)$, is the $mn$-dimensional vector created by stacking the rows of $A$ as columns on top of one another.
 The trace of a square matrix $A$, denoted $\tr A$, is the sum of its diagonal entries.
 The direct sum of square matrices $A$ and $B$, denoted $A \oplus B$, is the block matrix
 \begin{equation*}
@@ -378,6 +380,12 @@ The general problem has a polynomial time $O(\sqrt{n})$-approximation, but unles
     Type: & maximization.
   \end{tabular}
 \end{definition}
+
+Why is the former optimization problem a special case of the latter?
+Consider the vector $x$ to be $\vect(D)$.
+The feasible area can be defined by the linear constraints $D \1 = \1$ and $D^T \1 = \1$.
+By the definition of trace and tensor product, $\tr(AD^TBD) = \vect(D)^T (B \otimes A) \vect(D)$.
+For the measure function, choose $Q = 2(B \otimes A)$ and $c = \mathbf{0}$.
 
 The budget problem for \MQP{} is $\NP$-complete \autocite{vavasis90}, so the optimization problem is in $\NPO$.
 Although special cases are approximable (for example, \autocite{vavasis92, fly98}), in general no quasipolynomial approximation exists unless $\NP \subseteq \QP$, and no $O(1)$-approximation exists unless $\P = \NP$ \autocite{br95}.
