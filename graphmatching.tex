@@ -390,6 +390,9 @@ Even worse, I believe the objective function is \emph{never} convex, regardless 
 The quadratic form of the Hessian of the objective function, $x^T H x$, equals $2 \tr(AX \otimes BX)$, where $X$ is the $n \times n$ matrix containing the $n^2$ entries of the vector $x$.
 This value is positive if $x$ is a positive vector, so $H$ is not a negative definite matrix, and therefore there are local maxima.
 
+There is a polynomial time constant-factor approximation to the indefinite quadratic programming if the matrix of quadratic coefficients $Q$ has a constant number of negative eigenvalues \autocite{vavasis92}.
+\todo{Under what conditions on $A$ and $B$ does the corresponding matrix $Q$ have a constant number of negative eigenvalues?}
+
 \subsection{Convex relaxed graph matching}
 
 \begin{definition}[\RMD]
