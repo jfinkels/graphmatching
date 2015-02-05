@@ -399,6 +399,8 @@ The quadratic form of the Hessian of the objective function, $x^T H x$, equals $
 This value is positive if $x$ is a positive vector, so $H$ is not a negative definite matrix, and therefore there are local maxima.
 
 There is a polynomial time constant-factor approximation to the indefinite quadratic programming if the matrix of quadratic coefficients $Q$ has a constant number of negative eigenvalues \autocite{vavasis92}.
+By the definition of trace, tensor product, and eigenvalues of a matrix, $\lambda_{i,j}(A \otimes B) = \lambda_i(A) \lambda_j(B)$.
+Thus if both $A$ and $B$ have a constant number of negative eigenvalues, so does $A \otimes B$.
 \todo{Under what conditions on $A$ and $B$ does the corresponding matrix $Q$ have a constant number of negative eigenvalues?}
 
 \subsection{Convex relaxed graph matching}
