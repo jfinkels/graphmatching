@@ -227,6 +227,20 @@ The latter problem is called ``indefinite'' because the Hessian matrix of the ob
 Since $A$ and $B$ are symmetric matrices, this is simply $2 A_{ii'} B_{jj'}$.
 The trace of the matrix is therefore $2 \tr(A \otimes B)$, a constant function with respect to $D$ whose value is always zero if the graphs being considered do not have self-loops.)
 
+Now \autoref{eq:trace} holds even if $P$ is just a unitary matrix (that is, a matrix satisfying $P^T P = I$), so another relaxation could be
+\begin{align*}
+  \text{minimize } & \|UA - BU\|^2 \\
+  \text{subject to } & U^T U = I \\
+  & U \geq O,
+\end{align*}
+or equivalently,
+\begin{align*}
+  \text{maximize } & \tr(AU^TBU) \\
+  \text{subject to } & U^T U = I \\
+  & U \geq O.
+\end{align*}
+Whereas the relaxed graph matching problems defined above for doubly stochastic matrices have a quadratic objective function and linear constraints, these relaxations have a quadratic objective function with \emph{quadratic} constraints and are therefore more difficult to solve.
+
 \section{Complexity of graph matching problems}
 
 In this section, we have renamed the two formulations of the graph matching problem to \MD{} and \MA{}, and expressed the problems as formal optimization problems.
