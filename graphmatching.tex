@@ -101,7 +101,7 @@
 \newcommand{\RMD}{\textsc{Relaxed Minimum Disagreement}}
 \newcommand{\RMA}{\textsc{Relaxed Maximum Agreement}}
 \newcommand{\MQA}{\textsc{Maximum Quadratic Assignment}}
-\newcommand{\MQP}{\textsc{Maximum Quadratic Programming}}
+\newcommand{\MQP}{\textsc{Minimum Quadratic Programming}}
 \newcommand{\CQP}{\textsc{Convex Quadratic Programming}}
 \newcommand{\SMD}{\textsc{Seeded Minimum Disagreement}}
 \newcommand{\SMA}{\textsc{Seeded Maximum Agreement}}
@@ -179,7 +179,7 @@ Since
 \end{align}
 and since $\|A\|$ and $\|B\|$ are constants with respect to the variable $P$, an equivalent formulation of the graph matching problem is
 \begin{align*}
-  \text{maximize } & \tr(AP^TBP) \\
+  \text{minimize } & -\tr(AP^TBP) \\
   \text{subject to } & P \1 = \1 \\
   & P^T \1 = \1 \\
   & P \in \{0, 1\}^{n \times n}.
@@ -200,16 +200,16 @@ The \emph{convex relaxed graph matching problem} is
 \end{align*}
 and the \emph{indefinite relaxed graph matching problem} is
 \begin{align*}
-  \text{maximize } & \tr(AD^TBD) \\
+  \text{minimize } & -\tr(AD^TBD) \\
   \text{subject to } & D \1 = \1 \\
   & D^T \1 = \1 \\
   & D \geq O.
 \end{align*}
-In either problem, the domain over which to maximize is the set of doubly stochastic matrices, which is the convex hull of the set of permutation matrices.
+In either problem, the domain over which the objective function is minimized is the set of doubly stochastic matrices, which is the convex hull of the set of permutation matrices.
 However, only in the former problem is the objective function convex (hence its name).
 \todo{Explain why the objective function is convex.}
 The latter problem is called ``indefinite'' because the Hessian matrix of the objective function has trace zero at each point in the domain, and is therefore an indefinite matrix, which indicates that the objective function is \emph{not} convex.\footnote{%
-  The \emph{Hessian} of a multivariate function $f$ is the matrix of its second-order partial derivatives; specifically, entry $(i, j)$ in the Hessian matrix is $\frac{\partial^2 f}{\partial x_i \partial x_j}$.
+  The \emph{Hessian} of a real-valued multivariate function $f$ is the matrix of its second-order partial derivatives; specifically, entry $(i, j)$ in the Hessian matrix is $\frac{\partial^2 f}{\partial x_i \partial x_j}$.
   Evaluating the Hessian matrix entrywise at a point in the domain produces a matrix with real entries.
   If the Hessian matrix evaluated at a critical point is nonsingular, then the signs of the eigenvalues of this matrix indicate whether the critical point is a local minimum, a local maximum, or a saddle point.
   (This is just the multivariate generalization of using the second derivative of a univariate function to determine whether a critical point is a local minimum or a local maximum.)
@@ -235,7 +235,7 @@ Now \autoref{eq:trace} holds even if $P$ is just a unitary matrix (that is, a ma
 \end{align*}
 or equivalently,
 \begin{align*}
-  \text{maximize } & \tr(AU^TBU) \\
+  \text{minimize } & -\tr(AU^TBU) \\
   \text{subject to } & U^T U = I \\
   & U \geq O.
 \end{align*}
@@ -266,8 +266,8 @@ In this section, we have renamed the two formulations of the graph matching prob
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
     Solution: & $n \times n$ permutation matrix $P$. \\
-    Measure: & $\tr(AP^TBP)$. \\
-    Type: & maximization.
+    Measure: & $-\tr(AP^TBP)$. \\
+    Type: & minimization.
   \end{tabular}
 \end{definition}
 
@@ -285,15 +285,15 @@ As stated in the previous section, \MD{} and \MA{} are equivalent, so it suffice
   \end{equation*}
   which is equivalent to
   \begin{equation*}
-    \tr(AP^TBP) = \frac{1}{2} (\|A\|^2 + \|B\|^2 - \|PA - BP\|^2).
+    -\tr(AP^TBP) = \frac{1}{2} (\|PA - BP\|^2 - \|A\|^2 - \|B\|^2).
   \end{equation*}
   By these two equalities,
   \begin{equation*}
-    \|PA - BP\|^2 \leq k \iff \tr(AP^TBP) \geq \frac{1}{2} (\|A\|^2 + \|B\|^2 - k)
+    \|PA - BP\|^2 \leq k \iff -\tr(AP^TBP) \leq \frac{1}{2} (k - \|A\|^2 - \|B\|^2)
   \end{equation*}
   and
   \begin{equation*}
-    \tr(AP^TBP) \geq k \iff \|PA - BP\|^2 \leq \|A\|^2 + \|B\|^2 - 2k.
+    -\tr(AP^TBP) \leq k \iff \|PA - BP\|^2 \leq \|A\|^2 + \|B\|^2 - 2k.
   \end{equation*}
   It is straightforward to apply these equivalences to construct the stated reductions.
 \end{proof}
@@ -332,9 +332,9 @@ This proof is based on the proof of the $\NP$-completeness of the budget problem
   \end{align*}
   where the last equality is due to the definition of $B$ and the factor of $2$ is due to the fact that both $A$ and $B$ are symmetric matrices.
   Since $A$ is just the adjacency matrix of $G$ and the undirected edge $(\pi(i), \pi(i + 1))$ is in $E$ for each $i$ in $[n]$, the above sum is exactly $2n$.
-  In particular, $\tr(AP^TBP) \geq 2n$, so $(A, B, 2n)$ is in the budget problem for \MA{}.
+  In particular, $-\tr(AP^TBP) \leq -2n$, so $(A, B, -2n)$ is in the budget problem for \MA{}.
 
-  Now suppose that $\tr(AP^TBP) \geq 2n$.
+  Now suppose that $-\tr(AP^TBP) \leq -2n$.
   The above equalities still hold, so $2\sum_i A_{\pi(i), \pi(i + 1)} \geq 2n$.
   Since the entries of $A$ are in $\{0, 1\}$, this inequality is only satisfied if each $A_{\pi(i), \pi(i + 1)}$ is $1$.
   In other words, for each $i$, the undirected edge $(\pi(i), \pi(i + 1))$ is in $E$, so $\pi$ defines a Hamiltonian cycle in $G$.
@@ -356,8 +356,8 @@ It is also the special case of the budget problem for \MA{} in which the budget 
   \begin{tabular}{r p{9.3cm}}
     Instance: & $n \times n$ real matrices $A$ and $B$. \\
     Solution: & $n \times n$ permutation matrix $P$. \\
-    Measure: & $\tr(AP^TBP)$. \\
-    Type: & maximization.
+    Measure: & $-\tr(AP^TBP)$. \\
+    Type: & minimization.
   \end{tabular}
 \end{definition}
 
@@ -377,8 +377,8 @@ The general problem has a polynomial time $O(\sqrt{n})$-approximation, but unles
   \begin{tabular}{r p{9.3cm}}
     Instance: & adjacency matrices $A$ and $B$ of two undirected graphs on $n$ vertices. \\
     Solution: & $n \times n$ doubly stochastic matrix $D$. \\
-    Measure: & $\tr(AD^TBD)$. \\
-    Type: & maximization.
+    Measure: & $-\tr(AD^TBD)$. \\
+    Type: & minimization.
   \end{tabular}
 \end{definition}
 
@@ -391,7 +391,7 @@ The general problem has a polynomial time $O(\sqrt{n})$-approximation, but unles
     Instance: & an $m \times n$ real matrix $A$, an $m \times 1$ real vector $b$, an $n \times 1$ real vector $c$, and an $n \times n$ real symmetric matrix $Q$. \\
     Solution: & an $n \times 1$ real vector $x$, subject to the constraints $Ax \leq b$. \\
     Measure: & $\frac{1}{2} x^T Q x + c^T x$. \\
-    Type: & maximization.
+    Type: & minimization.
   \end{tabular}
 \end{definition}
 
@@ -399,7 +399,8 @@ Why is the former optimization problem a special case of the latter?
 Consider the vector $x$ to be $\vect(D)$.
 The feasible area can be defined by the linear constraints $D \1 = \1$ and $D^T \1 = \1$.
 By the definition of trace and tensor product, $\tr(AD^TBD) = \vect(D)^T (B \otimes A) \vect(D)$.
-For the measure function, choose $Q = 2(B \otimes A)$ and $c = \mathbf{0}$.
+For the measure function, choose $Q = -2(B \otimes A)$ and $c = \mathbf{0}$.
+The matrix $Q$ is symmetric because the tensor product preserves symmetry.
 
 The budget problem for \MQP{} is $\NP$-complete \autocite{vavasis90}, so the optimization problem is in $\NPO$.
 Although special cases are approximable (for example, \autocite{vavasis92, fly98}), in general no quasipolynomial approximation exists unless $\NP \subseteq \QP$, and no $O(1)$-approximation exists unless $\P = \NP$ \autocite{br95}.
@@ -409,13 +410,14 @@ However, they provide no theoretical guarantee on the performance of their appro
 \todo{How approximable is this problem?}
 
 Even worse, I believe the objective function is \emph{never} convex, regardless of input graphs.
-The quadratic form of the Hessian of the objective function, $x^T H x$, equals $2 \tr(AX \otimes BX)$, where $X$ is the $n \times n$ matrix containing the $n^2$ entries of the vector $x$.
-This value is positive if $x$ is a positive vector, so $H$ is not a negative definite matrix, and therefore there are local maxima.
+The quadratic form of the Hessian of the objective function, $x^T H x$, equals $-2 \tr(AX \otimes BX)$, where $X$ is the $n \times n$ matrix containing the $n^2$ entries of the vector $x$.
+This value is negative if $x$ is a positive vector, so $H$ is not a positive definite matrix, and therefore the objective function has multiple local minima.
 
 There is a polynomial time constant-factor approximation to the indefinite quadratic programming problem if the matrix of quadratic coefficients $Q$ has a constant number of negative eigenvalues \autocite{vavasis92}.
 By the definition of trace, tensor product, and eigenvalues of a matrix, $\lambda_{i,j}(A \otimes B) = \lambda_i(A) \lambda_j(B)$.
 Thus if both $A$ and $B$ have a constant number of negative eigenvalues, so does $A \otimes B$.
-\todo{Under what conditions on $A$ and $B$ does the corresponding matrix $Q$ have a constant number of negative eigenvalues?}
+\autocite[Theorem~1]{torgasev85} gives a precise (though quote obtuse) characterization of graphs with a fixed number of negative eigenvalues; I have yet to fully understand it.
+\todo{Might also be able to use \autocite{ellingham93}, which is also somewhat complicated.}
 
 \subsection{Convex relaxed graph matching}
 
@@ -430,7 +432,7 @@ Thus if both $A$ and $B$ have a constant number of negative eigenvalues, so does
   \end{tabular}
 \end{definition}
 
-\RMD{} is a special case of the \CQP{} problem (itself a special case of the minimization form of \MQP{}) \todo{reference or explain why this is a special case}.
+\RMD{} is a special case of the \CQP{} problem (itself a special case of \MQP{}) \todo{reference or explain why this is a special case}.
 
 \begin{definition}[\CQP{}]
   \mbox{}
@@ -489,8 +491,8 @@ Thus, instead of finding an $n \times n$ permutation matrix $P$ that minimizes $
   \begin{tabular}{r p{9.3cm}}
     Instance: & symmetric $n \times n$ Boolean matrices $A$ and $B$, natural number $s$. \\
     Solution: & $(n - s) \times (n - s)$ permutation matrix $P$. \\
-    Measure: & $\tr(A (I_s \oplus P^T) B (I_s \oplus P))$. \\
-    Type: & maximization.
+    Measure: & $-\tr(A (I_s \oplus P^T) B (I_s \oplus P))$. \\
+    Type: & minimization.
   \end{tabular}
 \end{definition}
 
@@ -529,8 +531,8 @@ Just as \RMD{} is in $\PO$, so too is \SRMD{}, for the same reason.
   \begin{tabular}{r p{9.3cm}}
     Instance: & symmetric $n \times n$ Boolean matrices $A$ and $B$, $s \times s$ doubly stochastic matrix $C$. \\
     Solution: & $(n - s) \times (n - s)$ doubly stochastic matrix $D$. \\
-    Measure: & $\tr(A (C^T \oplus D^T) B (C \oplus D))$. \\
-    Type: & maximization.
+    Measure: & $-\tr(A (C^T \oplus D^T) B (C \oplus D))$. \\
+    Type: & minimization.
   \end{tabular}
 \end{definition}
 
