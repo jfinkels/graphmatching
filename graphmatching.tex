@@ -416,7 +416,7 @@ This value is negative if $x$ is a positive vector, so $H$ is not a positive def
 There is a polynomial time constant-factor approximation to the indefinite quadratic programming problem if the matrix of quadratic coefficients $Q$ has a constant number of negative eigenvalues \autocite{vavasis92}.
 By the definition of trace, tensor product, and eigenvalues of a matrix, $\lambda_{i,j}(A \otimes B) = \lambda_i(A) \lambda_j(B)$.
 Thus if both $A$ and $B$ have a constant number of negative eigenvalues, so does $A \otimes B$.
-\autocite[Theorem~1]{torgasev85} gives a precise (though quote obtuse) characterization of graphs with a fixed number of negative eigenvalues; I have yet to fully understand it.
+\autocite[Theorem~1]{torgasev85} gives a precise (though quite obtuse) characterization of graphs with a fixed number of negative eigenvalues; I have yet to fully understand it.
 \todo{Might also be able to use \autocite{ellingham93}, which is also somewhat complicated.}
 
 \subsection{Convex relaxed graph matching}
@@ -547,6 +547,11 @@ Much of the current research seems to involve computing a relaxed graph matching
 In \autocite{relax14}, the authors prove that when doing this, it is best to solve the indefinite relaxed graph matching problem instead of the convex relaxed graph matching problem (that is, \RMA{} instead of \RMD{}), because the former is almost always right and the latter almost always wrong; \autocite{v14} follows this strategy.
 Still, under certain conditions, solving the convex relaxed graph matching problem can yield the correct permutation matrix \autocite{abk14, fs14}.
 \autocite{kmgg14} seems to be the only work simply finding a relaxed graph matching without projecting that doubly stochastic matrix back to a permutation matrix (they are really only finding a relaxed graph matching between a single graph and itself, but it should be possible, using \autocite{gkms14}, to enforce that when running such an algorithm on the disjoint union of two graphs $A$ and $B$, the solution matches some vertices of $A$ with some vertices of $B$).
+
+A graph is \emph{compact} if the polytope of its fractional automorphisms is integral (that is, if the vertices of the polytope of doubly stochastic matrices $S$ such that $SA = AS$ have all integer entries).
+Deciding whether two compact graphs are isomorphic can be done by computing a vertex of this polytope and checking whether it is integral.
+(See \autocite{akrv15} for more information.)
+In other words, for compact graphs, no projection is necessary for recovering an isomorphism from a doubly stochastic matrix found via a relaxed graph matching procedure: the matrix is either already a permutation matrix, or, if not, the graphs are not isomorphic.
 
 \section{Amplifying disagreements}
 
