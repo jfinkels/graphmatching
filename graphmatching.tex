@@ -685,12 +685,8 @@ However, it does show that the tensor product, when used in this way, preserves 
 What we would like is an upper bound for the agreement of the larger graphs $\mathbf{G}$ and $\mathbf{H}$ given an upper bound for the agreement of the original graphs $G$ and $H$.
 Something like if $\agr(G, H) < \epsilon$, then $\agr(\mathbf{G}, \mathbf{H}) < \epsilon' < \epsilon$.
 \todo{How to show this?}
-
-\todo{
-  Is it true that if $\hat{P}(A \otimes A) = (B \otimes B)\hat{P}$ then $\hat{P} = P \otimes P$ for some permutation matrix $P$?
-  If so, then we can conclude that $PA = BP$.
-  In \autocite{owwz14}, the authors claim, citing a complicated \oldstylenums{1971} math paper, that if $G \otimes G$ is isomorphic to $H \otimes H$, then $G$ is isomorphic to $H$.
-}
+Unfortunately, it is not true in general that if $\hat{P}(A \otimes A) = (B \otimes B)\hat{P}$ then $\hat{P} = P \otimes P$ for some permutation matrix $P$: the setting $A = B = I$ provides a counterexample since any matrix $\hat{P}$, even those that are not ``factorable'', satisfies the equation for the ``larger'' matrices.
+On the other hand, in \autocite{owwz14}, the authors claim, citing a complicated \oldstylenums{1971} math paper, that if $G \otimes G$ is isomorphic to $H \otimes H$, then $G$ is isomorphic to $H$.
 
 \todo{Is it easier to show that some graph product increases disagreement instead of showing that it decreases agreement?}
 
